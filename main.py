@@ -2,6 +2,7 @@ import pygame
 
 pygame.init()
 
+import random
 from constants import *
 
 from piece import Block, Square
@@ -10,7 +11,7 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
 
 # events
-PIECE_DROP_DELAY: int = 500
+PIECE_DROP_DELAY: int = 100
 PIECE_DROP_EVENT: int = pygame.USEREVENT + 1
 pygame.time.set_timer(event=PIECE_DROP_EVENT, millis=PIECE_DROP_DELAY)
 
@@ -18,6 +19,7 @@ pygame.time.set_timer(event=PIECE_DROP_EVENT, millis=PIECE_DROP_DELAY)
 def draw_board(board: pygame.Rect) -> None:
     pygame.draw.rect(SCREEN, GREY, board, width=1)
     board_upper_left_pos: tuple[int, int] = board.x, board.y
+
     # grid for helping debugging
     for i in range(BOARD_WIDTH // BLOCK_SIZE):
         pygame.draw.line(
@@ -52,15 +54,21 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             elif event.type == pygame.KEYDOWN:
-                if not pieces_on_screen[-1].is_inside_board(board=BOARD):
-                    continue
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and not pieces_on_screen[
+                    -1
+                ].is_on_left_edge(board=BOARD):
                     pieces_on_screen[-1].move(direction=-1)
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT and not pieces_on_screen[
+                    -1
+                ].is_on_right_edge(board=BOARD):
                     pieces_on_screen[-1].move(direction=1)
             elif event.type == PIECE_DROP_EVENT:
                 pieces_on_screen[-1].drop()
-
+        print(pieces_on_screen)
+        if pieces_on_screen[-1].collided_with_obstacle(
+            pieces_on_screen=pieces_on_screen[:-1]
+        ):
+            pieces_on_screen.append(Square(color=GREEN))
         SCREEN.fill(BLACK)
         draw_board(board=BOARD)
         for piece in pieces_on_screen:

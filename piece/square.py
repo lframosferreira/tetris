@@ -27,23 +27,5 @@ class Square(Piece):
             ),
         ]
 
-    def draw(self, screen) -> None:
-        for block in self.body:
-            block.draw(screen=screen)
-
     def rotate(self, screen) -> None:
         pass
-
-    def drop(self) -> None:
-        for block in self.body:
-            block.body.y += BLOCK_SIZE
-
-    def move(self, direction: int) -> None:
-        for block in self.body:
-            block.body.x += direction * BLOCK_SIZE
-
-    def is_inside_board(self, board: pygame.Rect) -> bool:
-        gambiarra_board = pygame.Rect(
-            board.x + BLOCK_SIZE, board.y, BOARD_WIDTH - BLOCK_SIZE, BOARD_HEIGHT
-        )
-        return all([board.contains(block.body) for block in self.body])
