@@ -9,13 +9,15 @@ from piece import Block, Square
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
 
+# events
+PIECE_DROP_DELAY: int = 500
+PIECE_DROP_EVENT: int = pygame.USEREVENT + 1
+pygame.time.set_timer(event=PIECE_DROP_EVENT, millis=PIECE_DROP_DELAY)
 
-def draw_board(
-    board_upper_left_pos: tuple[int, int], board_width: int, board_height: int
-) -> None:
-    rect = pygame.Rect(*board_upper_left_pos, BOARD_WIDTH, BOARD_HEIGHT)
-    pygame.draw.rect(SCREEN, GREY, rect, width=1)
 
+def draw_board(board: pygame.Rect) -> None:
+    pygame.draw.rect(SCREEN, GREY, board, width=1)
+    board_upper_left_pos: tuple[int, int] = board.x, board.y
     # grid for helping debugging
     for i in range(BOARD_WIDTH // BLOCK_SIZE):
         pygame.draw.line(
@@ -42,20 +44,28 @@ def draw_board(
 def main():
     run: bool = True
     clock: pygame.time.Clock = pygame.time.Clock()
+    BOARD: pygame.Rect = pygame.Rect(*BOARD_UPPER_LEFT_POS, BOARD_WIDTH, BOARD_HEIGHT)
     pieces_on_screen: list = [Square(color=RED)]
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        pygame.display.update()
-        draw_board(
-            board_upper_left_pos=BOARD_UPPER_LEFT_POS,
-            board_width=BOARD_WIDTH,
-            board_height=BOARD_HEIGHT,
-        )
+            elif event.type == pygame.KEYDOWN:
+                if not pieces_on_screen[-1].is_inside_board(board=BOARD):
+                    continue
+                if event.key == pygame.K_LEFT:
+                    pieces_on_screen[-1].move(direction=-1)
+                if event.key == pygame.K_RIGHT:
+                    pieces_on_screen[-1].move(direction=1)
+            elif event.type == PIECE_DROP_EVENT:
+                pieces_on_screen[-1].drop()
+
+        SCREEN.fill(BLACK)
+        draw_board(board=BOARD)
         for piece in pieces_on_screen:
             piece.draw(screen=SCREEN)
+        pygame.display.update()
     pygame.quit()
 
 

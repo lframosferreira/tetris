@@ -12,7 +12,7 @@ class Piece(ABC):
         self.color: tuple[int, int, int] = color
 
     @abstractmethod
-    def draw(self) -> None:
+    def draw(self, screen) -> None:
         pass
 
     @abstractmethod
