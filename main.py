@@ -5,7 +5,7 @@ pygame.init()
 import random
 from constants import *
 
-from piece import Square
+from piece import O, I
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
@@ -47,7 +47,7 @@ def main():
     run: bool = True
     clock: pygame.time.Clock = pygame.time.Clock()
     BOARD: pygame.Rect = pygame.Rect(*BOARD_UPPER_LEFT_POS, BOARD_WIDTH, BOARD_HEIGHT)
-    pieces_on_screen: list = [Square(color=RED)]
+    pieces_on_screen: list = [I(color=RED)]
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -75,7 +75,7 @@ def main():
         if pieces_on_screen[-1].will_collide_with_obstacle(
             pieces_on_screen=pieces_on_screen[:-1]
         ):
-            pieces_on_screen.append(Square(color=GREEN))
+            pieces_on_screen.append(O(color=BLUE))
         SCREEN.fill(BLACK)
         draw_board(board=BOARD)
         for piece in pieces_on_screen:

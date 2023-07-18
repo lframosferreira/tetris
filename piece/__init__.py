@@ -1,1 +1,2 @@
-from .square import Square
+from .O import O
+from .I import I
