@@ -28,5 +28,5 @@ class Square(Piece):
             ),
         ]
 
-    def rotate(self, screen) -> None:
+    def rotate(self) -> None:
         pass

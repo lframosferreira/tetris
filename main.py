@@ -11,7 +11,7 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
 
 # events
-PIECE_DROP_DELAY: int = 100
+PIECE_DROP_DELAY: int = 250
 PIECE_DROP_EVENT: int = pygame.USEREVENT + 1
 pygame.time.set_timer(event=PIECE_DROP_EVENT, millis=PIECE_DROP_DELAY)
 
@@ -59,14 +59,16 @@ def main():
                     and not pieces_on_screen[-1].is_on_left_edge()
                 ):
                     pieces_on_screen[-1].move(direction=-1)
-                if (
+                elif (
                     event.key == pygame.K_RIGHT
                     and not pieces_on_screen[-1].is_on_right_edge()
                 ):
                     pieces_on_screen[-1].move(direction=1)
+                elif (event.key == pygame.K_UP):
+                    pieces_on_screen[-1].rotate()
             elif event.type == PIECE_DROP_EVENT:
                 pieces_on_screen[-1].drop()
-        if pieces_on_screen[-1].collided_with_obstacle(
+        if pieces_on_screen[-1].will_collide_with_obstacle(
             pieces_on_screen=pieces_on_screen[:-1]
         ):
             pieces_on_screen.append(Square(color=GREEN))
