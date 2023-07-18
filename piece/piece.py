@@ -1,6 +1,7 @@
 import pygame
 from abc import ABC, abstractmethod
 import sys
+import copy
 
 sys.path.append("..")
 
@@ -21,9 +22,21 @@ class Piece(ABC):
         for block in self.body:
             block.y += BLOCK_SIZE
 
-    def move(self, direction: int) -> None:
-        for block in self.body:
+    def move(self, direction: int, pieces_on_screen: list) -> None:
+        future_body: list[pygame.Rect] = copy.deepcopy(self.body)
+        for block in future_body:
             block.x += direction * BLOCK_SIZE
+        can_move: bool = True
+        for future_block in future_body:
+            can_move = can_move and all(
+                [
+                    future_block.collidelist(piece_on_screen.body) == -1
+                    for piece_on_screen in pieces_on_screen
+                ]
+            )
+        if can_move:
+            for block in self.body:
+                block.x += direction * BLOCK_SIZE
 
     def is_on_left_edge(self) -> bool:
         return any([block.x == BOARD_LEFT for block in self.body])
@@ -34,7 +47,7 @@ class Piece(ABC):
         )
 
     def will_collide_with(self, other) -> bool:
-        future_body: list[pygame.Rect] = self.body.copy()
+        future_body: list[pygame.Rect] = copy.deepcopy(self.body)
         for block in future_body:
             block.y += BLOCK_SIZE
         return any([block.collidelist(other.body) != -1 for block in future_body])

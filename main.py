@@ -58,13 +58,17 @@ def main():
                     event.key == pygame.K_LEFT
                     and not pieces_on_screen[-1].is_on_left_edge()
                 ):
-                    pieces_on_screen[-1].move(direction=-1)
+                    pieces_on_screen[-1].move(
+                        direction=-1, pieces_on_screen=pieces_on_screen[:-1]
+                    )
                 elif (
                     event.key == pygame.K_RIGHT
                     and not pieces_on_screen[-1].is_on_right_edge()
                 ):
-                    pieces_on_screen[-1].move(direction=1)
-                elif (event.key == pygame.K_UP):
+                    pieces_on_screen[-1].move(
+                        direction=1, pieces_on_screen=pieces_on_screen[:-1]
+                    )
+                elif event.key == pygame.K_UP:
                     pieces_on_screen[-1].rotate()
             elif event.type == PIECE_DROP_EVENT:
                 pieces_on_screen[-1].drop()
