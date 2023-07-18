@@ -5,7 +5,7 @@ pygame.init()
 import random
 from constants import *
 
-from piece import Block, Square
+from piece import Square
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
@@ -54,17 +54,18 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and not pieces_on_screen[
-                    -1
-                ].is_on_left_edge(board=BOARD):
+                if (
+                    event.key == pygame.K_LEFT
+                    and not pieces_on_screen[-1].is_on_left_edge()
+                ):
                     pieces_on_screen[-1].move(direction=-1)
-                if event.key == pygame.K_RIGHT and not pieces_on_screen[
-                    -1
-                ].is_on_right_edge(board=BOARD):
+                if (
+                    event.key == pygame.K_RIGHT
+                    and not pieces_on_screen[-1].is_on_right_edge()
+                ):
                     pieces_on_screen[-1].move(direction=1)
             elif event.type == PIECE_DROP_EVENT:
                 pieces_on_screen[-1].drop()
-        print(pieces_on_screen)
         if pieces_on_screen[-1].collided_with_obstacle(
             pieces_on_screen=pieces_on_screen[:-1]
         ):
