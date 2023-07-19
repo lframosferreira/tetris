@@ -5,13 +5,13 @@ pygame.init()
 import random
 from constants import *
 
-from piece import O, I
+from piece import Square, I
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
 
 # events
-PIECE_DROP_DELAY: int = 250
+PIECE_DROP_DELAY: int = 500
 PIECE_DROP_EVENT: int = pygame.USEREVENT + 1
 pygame.time.set_timer(event=PIECE_DROP_EVENT, millis=PIECE_DROP_DELAY)
 
@@ -68,14 +68,20 @@ def main():
                     pieces_on_screen[-1].move(
                         direction=1, pieces_on_screen=pieces_on_screen[:-1]
                     )
-                elif event.key == pygame.K_UP:
-                    pieces_on_screen[-1].rotate()
+                elif event.key == pygame.K_z:
+                    pieces_on_screen[-1].rotate(
+                        pieces_on_screen=pieces_on_screen[:-1], direction=-1
+                    )
+                elif event.key == pygame.K_x:
+                    pieces_on_screen[-1].rotate(
+                        pieces_on_screen=pieces_on_screen[:-1], direction=1
+                    )
             elif event.type == PIECE_DROP_EVENT:
                 pieces_on_screen[-1].drop()
         if pieces_on_screen[-1].will_collide_with_obstacle(
             pieces_on_screen=pieces_on_screen[:-1]
         ):
-            pieces_on_screen.append(O(color=BLUE))
+            pieces_on_screen.append(I(color=BLUE))
         SCREEN.fill(BLACK)
         draw_board(board=BOARD)
         for piece in pieces_on_screen:
