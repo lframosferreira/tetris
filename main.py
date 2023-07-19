@@ -5,7 +5,7 @@ pygame.init()
 import random
 from constants import *
 
-from piece import Square, I
+from piece import Square, I, LeftGun, RightGun
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
@@ -47,7 +47,7 @@ def main():
     run: bool = True
     clock: pygame.time.Clock = pygame.time.Clock()
     BOARD: pygame.Rect = pygame.Rect(*BOARD_UPPER_LEFT_POS, BOARD_WIDTH, BOARD_HEIGHT)
-    pieces_on_screen: list = [I(color=RED)]
+    pieces_on_screen: list = [RightGun(color=RED)]
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
