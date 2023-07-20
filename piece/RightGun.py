@@ -41,14 +41,11 @@ class RightGun(Piece):
             for i, block in enumerate(future_body[1:]):
                 block.x += BLOCK_SIZE * (1 - i)
                 block.y += BLOCK_SIZE * (i - 1)
-            self.state = int((self.state + 1) % 4)
         elif self.state == 1 or self.state == 3:
             future_body[0].x += 2 * BLOCK_SIZE * (-1 if self.state == 1 else 1)
             for i, block in enumerate(future_body[1:]):
                 block.x += BLOCK_SIZE * (i - 1)
                 block.y += BLOCK_SIZE * (1 - i)
-            self.state = int((self.state + 1) % 4)
-            pass
         else:
             print("Something went wrong with the piece state")
         can_move: bool = True
@@ -61,3 +58,4 @@ class RightGun(Piece):
             )
         if can_move:
             self.body = future_body
+            self.state = int((self.state + 1) % 4)

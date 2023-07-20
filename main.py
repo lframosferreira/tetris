@@ -5,7 +5,7 @@ pygame.init()
 import random
 from constants import *
 
-from piece import Square, I, LeftGun, RightGun, LeftSnake
+from piece import Square, I, LeftGun, RightGun, LeftSnake, RightSnake, T
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
@@ -47,7 +47,7 @@ def main():
     run: bool = True
     clock: pygame.time.Clock = pygame.time.Clock()
     BOARD: pygame.Rect = pygame.Rect(*BOARD_UPPER_LEFT_POS, BOARD_WIDTH, BOARD_HEIGHT)
-    pieces_on_screen: list = [LeftSnake(color=RED)]
+    pieces_on_screen: list = [T(color=GREEN)]
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -77,6 +77,7 @@ def main():
                         pieces_on_screen=pieces_on_screen[:-1], direction=1
                     )
             elif event.type == PIECE_DROP_EVENT:
+                continue
                 pieces_on_screen[-1].drop()
         if pieces_on_screen[-1].will_collide_with_obstacle(
             pieces_on_screen=pieces_on_screen[:-1]

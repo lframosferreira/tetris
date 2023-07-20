@@ -25,13 +25,10 @@ class I(Piece):
             for i, block in enumerate(future_body):
                 block.x += BLOCK_SIZE * (2 - i - int(self.state == 2))
                 block.y += BLOCK_SIZE * (i - 2)
-            self.state = int((self.state + 1) % 4)
         elif self.state == 1 or self.state == 3:
             for i, block in enumerate(future_body):
                 block.x += BLOCK_SIZE * (i - 2 + int(self.state == 3))
                 block.y += BLOCK_SIZE * (2 - i)
-            self.state = int((self.state + 1) % 4)
-            pass
         else:
             print("Something went wrong with the piece state")
         can_move: bool = True
@@ -44,3 +41,4 @@ class I(Piece):
             )
         if can_move:
             self.body = future_body
+            self.state = int((self.state + 1) % 4)

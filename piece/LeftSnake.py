@@ -38,17 +38,22 @@ class LeftSnake(Piece):
         future_body: list = copy.deepcopy(self.body)
         if self.state == 0 or self.state == 2:
             future_body[1].x += 2 * BLOCK_SIZE * (1 if self.state == 0 else -1)
-            for block in future_body[2:]:
-                block.x += BLOCK_SIZE * (1 if self.state == 0 else -1)
-                block.y += BLOCK_SIZE * (-1 if self.state == 0 else 1)
-            self.state = int((self.state + 1) % 4)
+    
+            future_body[2].x += BLOCK_SIZE * (1 if self.state == 0 else -1)
+            future_body[3].x += BLOCK_SIZE * (-1 if self.state == 0 else 1)
+
+            future_body[2].y += BLOCK_SIZE * (1 if self.state == 0 else -1)
+            future_body[3].y += BLOCK_SIZE * (1 if self.state == 0 else -1)
+
         elif self.state == 1 or self.state == 3:
             future_body[1].y += 2 * BLOCK_SIZE * (1 if self.state == 1 else -1)
-            for block in future_body[2:]:
-                block.x += BLOCK_SIZE * (-1 if self.state == 0 else 1)
-                block.y += BLOCK_SIZE * (1 if self.state == 0 else -1)
-            self.state = int((self.state + 1) % 4)
-            pass
+
+            future_body[2].x += BLOCK_SIZE * (-1 if self.state == 1 else 1)
+            future_body[3].x += BLOCK_SIZE * (-1 if self.state == 1 else 1)
+
+            future_body[2].y += BLOCK_SIZE * (1 if self.state == 1 else -1)
+            future_body[3].y += BLOCK_SIZE * (-1 if self.state == 1 else 1)
+
         else:
             print("Something went wrong with the piece state")
         can_move: bool = True
@@ -61,3 +66,4 @@ class LeftSnake(Piece):
             )
         if can_move:
             self.body = future_body
+            self.state = int((self.state + 1) % 4)
