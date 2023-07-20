@@ -1,6 +1,6 @@
 # tetris
 
-Tetris game made with the PyGame engine.
+Tetris game made in pure Python using the [PyGame](https://www.pygame.org/news) engine.
 
 ## TODO
 
