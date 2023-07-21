@@ -6,7 +6,7 @@ SCREEN_HEIGHT: int = 750
 BOARD_WIDTH: int = 250
 BOARD_HEIGHT: int = 500
 BOARD_LEFT: int = 100
-BOARD_TOP: int = 50
+BOARD_TOP: int = 100
 BOARD_UPPER_LEFT_POS: tuple[int, int] = (BOARD_LEFT, BOARD_TOP)
 FPS: int = 60
 
