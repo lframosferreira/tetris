@@ -11,13 +11,15 @@ from constants import *
 class Piece(ABC):
     def __init__(self, color: tuple[int, int, int]) -> None:
         self.color: tuple[int, int, int] = color
-        # self.body: list[pygame.Rect] = [] como definir isso
+        self.body: list[pygame.Rect] = []
         self.collided: bool = False
         self.state: int = 0
 
     def draw(self, screen) -> None:
         for block in self.body:
             pygame.draw.rect(surface=screen, rect=block, color=self.color)
+        for block in self.body:
+            pygame.draw.rect(surface=screen, rect=block, color=BLACK, width=2)
 
     def drop(self) -> None:
         for block in self.body:
