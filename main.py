@@ -52,11 +52,14 @@ def draw_board(board: pygame.Rect) -> None:
 
 def check_line_clean(board: pygame.Rect, pieces_on_screen: list) -> None:
     blocks_in_screen: list = [
-                (piece_on_screen, piece_on_screen.body)
-                for piece_on_screen in pieces_on_screen
-            ]
-    blocks_in_screen = [(piece_on_screen, block) for (piece_on_screen, body) in blocks_in_screen for block in body]
-    
+        (piece_on_screen, piece_on_screen.body) for piece_on_screen in pieces_on_screen
+    ]
+    blocks_in_screen = [
+        (piece_on_screen, block)
+        for (piece_on_screen, body) in blocks_in_screen
+        for block in body
+    ]
+
     for row in range(
         BOARD_UPPER_LEFT_POS[1] + board.height - BLOCK_SIZE,
         BOARD_UPPER_LEFT_POS[1] - BLOCK_SIZE,
@@ -81,7 +84,6 @@ def check_line_clean(board: pygame.Rect, pieces_on_screen: list) -> None:
             for _, block in blocks_in_screen:
                 if block.y < row:
                     block.y += BLOCK_SIZE
-
 
 
 def main():
@@ -111,11 +113,13 @@ def main():
                     )
                 elif event.key == pygame.K_z:
                     pieces_on_screen[-1].rotate(
-                        pieces_on_screen=pieces_on_screen[:-1], direction=-1
+                        pieces_on_screen=pieces_on_screen[:-1],
+                        board=BOARD,
+                        direction=-1,
                     )
                 elif event.key == pygame.K_x:
                     pieces_on_screen[-1].rotate(
-                        pieces_on_screen=pieces_on_screen[:-1], direction=1
+                        pieces_on_screen=pieces_on_screen[:-1], board=BOARD, direction=1
                     )
             elif event.type == PIECE_DROP_EVENT:
                 pieces_on_screen[-1].drop()
@@ -125,9 +129,7 @@ def main():
             random_piece = random.choice(PIECES)
             random_color = random.choice(COLORS)
             pieces_on_screen.append(random_piece(color=random_color))
-        check_line_clean(
-            board=BOARD, pieces_on_screen=pieces_on_screen[:-1]
-        )
+        check_line_clean(board=BOARD, pieces_on_screen=pieces_on_screen[:-1])
         SCREEN.fill(WHITE)
         draw_board(board=BOARD)
         for piece in pieces_on_screen:

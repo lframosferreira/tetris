@@ -5,7 +5,7 @@ sys.path.append("..")
 
 from constants import *
 
-from .Piece import Piece
+from .Piece import Piece, is_inside_board
 
 
 class Square(Piece):
@@ -28,5 +28,7 @@ class Square(Piece):
             ),
         ]
 
-    def rotate(self, pieces_on_screen: list, direction: int) -> None:
+    def rotate(
+        self, pieces_on_screen: list, board: pygame.Rect, direction: int
+    ) -> None:
         pass

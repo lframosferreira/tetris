@@ -8,6 +8,10 @@ sys.path.append("..")
 from constants import *
 
 
+def is_inside_board(block: pygame.Rect, board: pygame.Rect) -> bool:
+    return board.contains(block)
+
+
 class Piece(ABC):
     def __init__(self, color: tuple[int, int, int]) -> None:
         self.color: tuple[int, int, int] = color
@@ -73,5 +77,7 @@ class Piece(ABC):
         return collided_with_floor or collided_with_pieces_on_screen
 
     @abstractmethod
-    def rotate(self, pieces_on_screen: list, direction: int) -> None:
+    def rotate(
+        self, pieces_on_screen: list, board: pygame.Rect, direction: int
+    ) -> None:
         pass

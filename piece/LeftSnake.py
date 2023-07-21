@@ -6,7 +6,7 @@ sys.path.append("..")
 
 from constants import *
 
-from .Piece import Piece
+from .Piece import Piece, is_inside_board
 
 
 class LeftSnake(Piece):
@@ -34,11 +34,13 @@ class LeftSnake(Piece):
             ),
         ]
 
-    def rotate(self, pieces_on_screen: list, direction: int) -> None:
+    def rotate(
+        self, pieces_on_screen: list, board: pygame.Rect, direction: int
+    ) -> None:
         future_body: list = copy.deepcopy(self.body)
         if self.state == 0 or self.state == 2:
             future_body[1].x += 2 * BLOCK_SIZE * (1 if self.state == 0 else -1)
-    
+
             future_body[2].x += BLOCK_SIZE * (1 if self.state == 0 else -1)
             future_body[3].x += BLOCK_SIZE * (-1 if self.state == 0 else 1)
 
@@ -63,7 +65,7 @@ class LeftSnake(Piece):
                     future_block.collidelist(piece_on_screen.body) == -1
                     for piece_on_screen in pieces_on_screen
                 ]
-            )
+            ) and is_inside_board(board=board, block=future_block)
         if can_move:
             self.body = future_body
             self.state = int((self.state + 1) % 4)

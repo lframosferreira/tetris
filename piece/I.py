@@ -6,7 +6,7 @@ sys.path.append("..")
 
 from constants import *
 
-from .Piece import Piece
+from .Piece import Piece, is_inside_board
 
 
 class I(Piece):
@@ -19,7 +19,9 @@ class I(Piece):
             pygame.Rect(6 * BLOCK_SIZE + BOARD_LEFT, BOARD_TOP, BLOCK_SIZE, BLOCK_SIZE),
         ]
 
-    def rotate(self, pieces_on_screen: list, direction: int) -> None:
+    def rotate(
+        self, pieces_on_screen: list, board: pygame.Rect, direction: int
+    ) -> None:
         future_body: list = copy.deepcopy(self.body)
         if self.state == 0 or self.state == 2:
             for i, block in enumerate(future_body):
@@ -33,11 +35,15 @@ class I(Piece):
             print("Something went wrong with the piece state")
         can_move: bool = True
         for future_block in future_body:
-            can_move = can_move and all(
-                [
-                    future_block.collidelist(piece_on_screen.body) == -1
-                    for piece_on_screen in pieces_on_screen
-                ]
+            can_move = (
+                can_move
+                and all(
+                    [
+                        future_block.collidelist(piece_on_screen.body) == -1
+                        for piece_on_screen in pieces_on_screen
+                    ]
+                )
+                and is_inside_board(board=board, block=future_block)
             )
         if can_move:
             self.body = future_body
