@@ -51,7 +51,6 @@ def draw_board(board: pygame.Rect) -> None:
 
 
 def check_line_clean(board: pygame.Rect, pieces_on_screen: list) -> None:
-    rows_to_clear: list = []
     blocks_in_screen: list = [
                 (piece_on_screen, piece_on_screen.body)
                 for piece_on_screen in pieces_on_screen
@@ -79,6 +78,10 @@ def check_line_clean(board: pygame.Rect, pieces_on_screen: list) -> None:
         if can_remove:
             for index in collision_indexes:
                 blocks_in_screen[index][0].body.remove(blocks_in_screen[index][1])
+            for _, block in blocks_in_screen:
+                if block.y < row:
+                    block.y += BLOCK_SIZE
+
 
 
 def main():
