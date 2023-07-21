@@ -123,6 +123,12 @@ def main():
                     )
             elif event.type == PIECE_DROP_EVENT:
                 pieces_on_screen[-1].drop()
+        if pieces_on_screen[-1].is_colliding_with_obstacle(
+            pieces_on_screen=pieces_on_screen[:-1]
+        ):
+            print("You lost")
+            run = False
+            break
         if pieces_on_screen[-1].will_collide_with_obstacle(
             pieces_on_screen=pieces_on_screen[:-1]
         ):

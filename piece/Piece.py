@@ -59,9 +59,15 @@ class Piece(ABC):
             block.y += BLOCK_SIZE
         return any([block.collidelist(other.body) != -1 for block in future_body])
 
-    """
-        checks if piece collided with floor or any of the other pieces on screen
-    """
+    def is_colliding_with_obstacle(self, pieces_on_screen: list) -> bool:
+
+        collided_with_pieces_on_screen: bool = any(
+            [
+                any([block.collidelist(piece_on_screen.body) != -1 for block in self.body])
+                for piece_on_screen in pieces_on_screen
+            ]
+        )
+        return collided_with_pieces_on_screen
 
     def will_collide_with_obstacle(self, pieces_on_screen: list) -> bool:
         collided_with_floor: bool = any(
