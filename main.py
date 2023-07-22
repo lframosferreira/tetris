@@ -17,8 +17,17 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Tetris")
 
 
-def draw_font(lines_cleaned: int) -> None:
+def draw_font(lines_cleaned: int, tetris_count: int) -> None:
     score_text = SCORE_FONT.render("Lines cleaned: " + str(lines_cleaned), 1, BLACK)
+    SCREEN.blit(
+        score_text,
+        (
+            (SCREEN_WIDTH * 3) // 4 - score_text.get_width() // 2,
+            SCREEN_HEIGHT // 4 - score_text.get_height() // 2,
+        ),
+    )
+    tetris_rate: float = tetris_count * 4 / lines_cleaned if lines_cleaned != 0 else 0
+    score_text = SCORE_FONT.render("Tetris rate: " + str(tetris_rate), 1, BLACK)
     SCREEN.blit(
         score_text,
         (
@@ -105,6 +114,8 @@ def main():
     BOARD: pygame.Rect = pygame.Rect(*BOARD_UPPER_LEFT_POS, BOARD_WIDTH, BOARD_HEIGHT)
     pieces_on_screen: list = [random.choice(PIECES)(color=random.choice(COLORS))]
     lines_cleaned: int = 0
+    tetris_count: int = 0
+    tetris_rate: float = 0
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -154,12 +165,15 @@ def main():
             random_piece = random.choice(PIECES)
             random_color = random.choice(COLORS)
             pieces_on_screen.append(random_piece(color=random_color))
-        lines_cleaned += check_line_clean(
+        lines_cleaned_in_iteration: int = check_line_clean(
             board=BOARD, pieces_on_screen=pieces_on_screen[:-1]
         )
+        if lines_cleaned_in_iteration == 4:
+            tetris_count += 1
+        lines_cleaned += lines_cleaned_in_iteration
         SCREEN.fill(WHITE)
         draw_board(board=BOARD)
-        draw_font(lines_cleaned=lines_cleaned)
+        draw_font(lines_cleaned=lines_cleaned, tetris_count=tetris_count)
         for piece in pieces_on_screen:
             piece.draw(screen=SCREEN)
         pygame.display.update()
